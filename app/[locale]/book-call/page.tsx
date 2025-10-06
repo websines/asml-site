@@ -3,8 +3,8 @@ import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { withLocalePath, type Locale } from "@/lib/i18n";
 
-export default function BookCallPage({ params }: { params: { locale: Locale } }) {
-  const { locale } = params;
+export default async function BookCallPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
 
   return (
     <div className="space-y-20">
@@ -29,12 +29,12 @@ export default function BookCallPage({ params }: { params: { locale: Locale } })
               </ol>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Button asChild size="lg">
-                <Link href={withLocalePath(locale, "/contact")}>Submit project brief</Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link href={withLocalePath(locale, "/catalog")}>Download catalog</Link>
-              </Button>
+              <Link href={withLocalePath(locale, "/contact")}>
+                <Button size="lg">Submit project brief</Button>
+              </Link>
+              <Link href={withLocalePath(locale, "/catalog")}>
+                <Button variant="secondary" size="lg">Download catalog</Button>
+              </Link>
             </div>
           </div>
           <div className="card-surface space-y-4 rounded-[32px] border border-border/40 bg-surface/80 p-6">

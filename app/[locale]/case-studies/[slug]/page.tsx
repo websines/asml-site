@@ -12,11 +12,11 @@ export function generateStaticParams() {
 }
 
 type CaseStudyPageProps = {
-  params: { locale: Locale; slug: string };
+  params: Promise<{ locale: Locale; slug: string }>;
 };
 
-export default function CaseStudyPage({ params }: CaseStudyPageProps) {
-  const { slug, locale } = params;
+export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
+  const { slug, locale } = await params;
   const caseStudy = caseStudies.find((item) => item.slug === slug);
 
   if (!caseStudy) {
@@ -96,14 +96,12 @@ export default function CaseStudyPage({ params }: CaseStudyPageProps) {
       align="center"
     >
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <Button asChild size="lg">
-          <Link href={withLocalePath(locale, "/book-call")}>Book discovery call</Link>
-        </Button>
-        <Button asChild variant="ghost" size="lg">
-          <Link href={withLocalePath(locale, caseStudy.callToAction.href)}>
-            {caseStudy.callToAction.label}
-          </Link>
-        </Button>
+        <Link href={withLocalePath(locale, "/book-call")}>
+          <Button size="lg">Book discovery call</Button>
+        </Link>
+        <Link href={withLocalePath(locale, caseStudy.callToAction.href)}>
+          <Button variant="ghost" size="lg">{caseStudy.callToAction.label}</Button>
+        </Link>
       </div>
     </Section>
     </div>

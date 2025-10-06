@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { divisionDetails } from "@/content/divisions";
 import { withLocalePath, type Locale } from "@/lib/i18n";
 
-export default function DivisionsPage({ params }: { params: { locale: Locale } }) {
-  const { locale } = params;
+export default async function DivisionsPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
 
   return (
     <div className="space-y-20">
@@ -55,11 +55,9 @@ export default function DivisionsPage({ params }: { params: { locale: Locale } }
               ))}
             </div>
             <div className="mt-auto flex items-center justify-between border-t border-border/30 pt-4">
-              <Button asChild variant="secondary" size="sm">
-                <Link href={division.href} target="_blank" rel="noreferrer">
-                  Visit site ↗
-                </Link>
-              </Button>
+              <Link href={division.href} target="_blank" rel="noreferrer">
+                <Button variant="secondary" size="sm">Visit site ↗</Button>
+              </Link>
               <Link
                 href={withLocalePath(locale, "/contact")}
                 className="text-xs font-semibold uppercase tracking-[0.32em] text-primary transition hover:text-primary/80"
@@ -83,12 +81,12 @@ export default function DivisionsPage({ params }: { params: { locale: Locale } }
             Whether you are opening a new resort, securing bulk imports, or standing up a franchise, we pull in the right leads and deliver with shared accountability.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button asChild size="lg">
-              <Link href={withLocalePath(locale, "/book-call")}>Book a discovery call</Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg">
-              <Link href={withLocalePath(locale, "/catalog")}>Download catalog</Link>
-            </Button>
+            <Link href={withLocalePath(locale, "/book-call")}>
+              <Button size="lg">Book a discovery call</Button>
+            </Link>
+            <Link href={withLocalePath(locale, "/catalog")}>
+              <Button variant="ghost" size="lg">Download catalog</Button>
+            </Link>
           </div>
         </div>
       </section>

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
 
 interface CatalogRequest {
   firstName: string;
@@ -35,8 +34,8 @@ export async function POST(request: NextRequest) {
     // Log the request for development
     console.log("Catalog request received:", {
       ...data,
-      ip: headers().get("x-forwarded-for") || headers().get("x-real-ip"),
-      userAgent: headers().get("user-agent"),
+      ip: request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip"),
+      userAgent: request.headers.get("user-agent"),
     });
 
     // TODO: Replace with actual implementations

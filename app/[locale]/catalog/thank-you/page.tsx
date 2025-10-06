@@ -1,18 +1,19 @@
 import Link from "next/link";
 import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
+import { DownloadCatalogButton, WhatsappAnalyticsButton } from "@/components/catalog/catalog-actions";
 import { withLocalePath, type Locale } from "@/lib/i18n";
 
 type CatalogThankYouPageProps = {
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 };
 
-export default function CatalogThankYouPage({ params }: CatalogThankYouPageProps) {
-  const { locale } = params;
+export default async function CatalogThankYouPage({ params }: CatalogThankYouPageProps) {
+  const { locale } = await params;
 
   return (
     <div className="space-y-20">
-      <Section className="py-20">
+      <Section className="py-20" title="">
         <div className="text-center space-y-8">
           <div className="text-6xl">🎉</div>
           <div className="space-y-4">
@@ -25,25 +26,7 @@ export default function CatalogThankYouPage({ params }: CatalogThankYouPageProps
           </div>
 
           <div className="space-y-6">
-            <Button asChild size="lg" className="text-lg px-8 py-4">
-              <a
-                href="https://cdn.aslmllc.net/catalog/global-impact-2025.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  // Track catalog download
-                  if (typeof window !== "undefined" && window.gtag) {
-                    window.gtag("event", "catalog_download", {
-                      event_category: "engagement",
-                      event_label: "thank_you_page",
-                    });
-                  }
-                }}
-              >
-                Download Catalog Now
-              </a>
-            </Button>
-
+            <DownloadCatalogButton href="https://cdn.aslmllc.net/catalog/global-impact-2025.pdf" />
             <div className="text-sm text-muted/80">
               <p>Download also sent to your email for safekeeping</p>
             </div>
@@ -115,27 +98,10 @@ export default function CatalogThankYouPage({ params }: CatalogThankYouPageProps
         align="center"
       >
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Button asChild variant="outline">
-            <Link href={withLocalePath(locale, "/contact")}>Contact Us</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <a
-              href="https://wa.me/18681234567"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                // Track WhatsApp click
-                if (typeof window !== "undefined" && window.gtag) {
-                  window.gtag("event", "whatsapp_click", {
-                    event_category: "contact",
-                    event_label: "thank_you_page",
-                  });
-                }
-              }}
-            >
-              WhatsApp
-            </a>
-          </Button>
+          <Link href={withLocalePath(locale, "/contact")}>
+            <Button variant="outline">Contact Us</Button>
+          </Link>
+          <WhatsappAnalyticsButton href="https://wa.me/18681234567" label="WhatsApp" />
         </div>
       </Section>
     </div>

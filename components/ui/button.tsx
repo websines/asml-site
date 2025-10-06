@@ -1,12 +1,6 @@
-import type { LinkProps } from "next/link";
-import { cn } from "@/lib/utils";
-import type {
-  AnchorHTMLAttributes,
-  ButtonHTMLAttributes,
-  ReactElement,
-  ReactNode,
-} from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement, ReactNode } from "react";
 import { cloneElement, isValidElement } from "react";
+import { cn } from "@/lib/utils";
 
 type BaseProps = {
   children: ReactNode;
@@ -14,13 +8,13 @@ type BaseProps = {
   size?: "sm" | "md" | "lg";
   icon?: ReactNode;
   className?: string;
+  asChild?: boolean;
 };
 
-type ButtonProps = BaseProps &
-  (
-    | ({ asChild?: false } & ButtonHTMLAttributes<HTMLButtonElement>)
-    | ({ asChild?: true } & LinkProps & AnchorHTMLAttributes<HTMLAnchorElement>)
-  );
+type ButtonAsButton = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: false };
+type ButtonAsChild = BaseProps & AnchorHTMLAttributes<HTMLAnchorElement> & { asChild: true };
+
+export type ButtonProps = ButtonAsButton | ButtonAsChild;
 
 const VARIANT_STYLES: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
@@ -46,9 +40,9 @@ export function Button({
   className,
   icon,
   asChild,
-  ...props
+  ...rest
 }: ButtonProps) {
-  const shared = cn(
+  const sharedClasses = cn(
     "inline-flex items-center gap-2 rounded-full font-semibold tracking-tight transition-all duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:-translate-y-[1px] active:translate-y-0",
     VARIANT_STYLES[variant],
     SIZE_STYLES[size],
@@ -56,21 +50,26 @@ export function Button({
   );
 
   if (asChild && isValidElement(children)) {
-    const child = children as ReactElement;
-    const childClassName = child.props.className as string | undefined;
+    const child = children as ReactElement<Record<string, unknown>>;
+    const childClassName = (child.props as { className?: string }).className;
+    const childProps = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
+
     return cloneElement(child, {
-      className: cn(shared, childClassName),
+      ...childProps,
+      className: cn(sharedClasses, childClassName),
       children: (
         <>
           {icon}
-          {child.props.children}
+          {child.props.children as ReactNode}
         </>
       ),
     });
   }
 
+  const buttonProps = rest as ButtonHTMLAttributes<HTMLButtonElement>;
+
   return (
-    <button className={shared} {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}>
+    <button className={sharedClasses} {...buttonProps}>
       {icon}
       {children}
     </button>

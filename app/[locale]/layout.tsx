@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { SiteFooter, SiteHeader, WhatsAppChip } from "@/components/navigation/site-header";
 import { BackgroundOrnament } from "@/components/ui/background";
@@ -23,15 +24,17 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   }
 
   return (
-    <AnalyticsProvider>
-      <TrackingManager />
-      <div className="relative min-h-dvh overflow-x-hidden" data-locale={locale}>
-        <BackgroundOrnament />
-        <SiteHeader locale={locale as Locale} />
-        <main className="flex flex-col gap-24 pb-24 pt-20 lg:gap-32 lg:pb-32">{children}</main>
-        <SiteFooter locale={locale as Locale} />
-        <WhatsAppChip />
-      </div>
-    </AnalyticsProvider>
+    <Suspense fallback={null}>
+      <AnalyticsProvider>
+        <TrackingManager />
+        <div className="relative min-h-dvh overflow-x-hidden" data-locale={locale}>
+          <BackgroundOrnament />
+          <SiteHeader locale={locale as Locale} />
+          <main className="flex flex-col gap-24 pb-24 pt-20 lg:gap-32 lg:pb-32">{children}</main>
+          <SiteFooter locale={locale as Locale} />
+          <WhatsAppChip />
+        </div>
+      </AnalyticsProvider>
+    </Suspense>
   );
 }

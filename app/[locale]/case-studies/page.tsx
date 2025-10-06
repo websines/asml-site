@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { caseStudies, caseStudyFilters } from "@/content/case-studies";
 import { withLocalePath, type Locale } from "@/lib/i18n";
 
-export default function CaseStudiesPage({ params }: { params: { locale: Locale } }) {
-  const { locale } = params;
+export default async function CaseStudiesPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
 
   return (
     <div className="space-y-20">
@@ -54,9 +54,9 @@ export default function CaseStudiesPage({ params }: { params: { locale: Locale }
               </div>
             </div>
             <div className="mt-auto flex items-center justify-between border-t border-border/30 pt-4">
-              <Button asChild variant="secondary" size="sm">
-                <Link href={withLocalePath(locale, `/case-studies/${caseStudy.slug}`)}>Read</Link>
-              </Button>
+              <Link href={withLocalePath(locale, `/case-studies/${caseStudy.slug}`)}>
+                <Button variant="secondary" size="sm">Read</Button>
+              </Link>
               <Link
                 href={withLocalePath(locale, caseStudy.callToAction.href)}
                 className="text-xs font-semibold uppercase tracking-[0.32em] text-primary"
@@ -77,12 +77,12 @@ export default function CaseStudiesPage({ params }: { params: { locale: Locale }
             Let’s map your metrics and craft a scope that delivers faster wins.
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button asChild size="lg">
-              <Link href={withLocalePath(locale, "/book-call")}>Book a discovery call</Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg">
-              <Link href={withLocalePath(locale, "/contact")}>Talk to the team</Link>
-            </Button>
+            <Link href={withLocalePath(locale, "/book-call")}>
+              <Button size="lg">Book a discovery call</Button>
+            </Link>
+            <Link href={withLocalePath(locale, "/contact")}>
+              <Button variant="ghost" size="lg">Talk to the team</Button>
+            </Link>
           </div>
         </div>
       </section>
