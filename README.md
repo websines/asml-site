@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# A&S Global Impact 2025 – Marketing Site
 
-## Getting Started
+Next.js 15 marketing experience for A&S Logistique Mondiale Ltd LLC. Delivers a bilingual-ready layout, structured content, and lead funnels tuned for catalog downloads and discovery calls.
 
-First, run the development server:
+## Tech Stack
+- Next.js 15 (App Router, Turbopack)
+- React 19, TypeScript, Tailwind CSS 4 (inline theming)
+- Server Actions/API Routes for mock lead capture
+- Analytics integrations for GA4, Meta Pixel, LinkedIn Insight Tag
 
+## Local Development
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install  # or npm/yarn/bun
 pnpm dev
-# or
-bun dev
+```
+Visit `http://localhost:3000`. The root path redirects to the default locale (`/en`).
+
+### Available Scripts
+- `pnpm dev` – run the dev server with Turbopack
+- `pnpm build` – production build
+- `pnpm start` – serve the production build
+- `pnpm lint` – run ESLint (Next.js + TypeScript rules)
+
+## Environment Variables
+Copy `.env.example` to `.env.local` and supply live IDs when ready:
+
+```
+NEXT_PUBLIC_GA_MEASUREMENT_ID=
+NEXT_PUBLIC_META_PIXEL_ID=
+NEXT_PUBLIC_LINKEDIN_PARTNER_ID=
+# Optional:
+# NEXT_PUBLIC_HOTJAR_ID=
+# NEXT_PUBLIC_CLARITY_ID=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+These are read client-side by the analytics components. Keep placeholders during local development if tags are not yet provisioned.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure Highlights
+- `app/` – locale-aware routes (`/[locale]/**`), API endpoints under `app/api`
+- `components/` – design system primitives, navigation, forms, analytics widgets
+- `content/` – typed data sources for solutions, divisions, partners, case studies, etc.
+- `lib/` – hooks and utilities (forms, i18n helpers, performance tracking)
+- `public/assets/` – catalog artwork and shared imagery
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Forms & Lead Flow
+- Catalog request form posts to `app/api/catalog-request/route.ts` (mock storage) and redirects to `/[locale]/catalog/thank-you`.
+- Contact form posts to `app/api/contact/route.ts`, routes leads by division, and surfaces inline confirmation.
+- Both hooks (`useCatalogForm`, `useContactForm`) handle validation and fire analytics events when enabled.
 
-## Learn More
+## Localization
+Routing supports `en` and `es`. Current copy is English-only; add locale-specific strings in `content/*` and components before launching Spanish.
 
-To learn more about Next.js, take a look at the following resources:
+## Analytics
+`components/analytics/*` centralises GA4, Meta Pixel, LinkedIn Insight Tag, and Core Web Vitals tracking. Tags only render when their environment variables are present to avoid noisy console errors in development.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Performance & Accessibility
+- Base theming and tokens defined in `app/globals.css`
+- Optimized image wrapper (`components/ui/optimized-image`) and lazy section helper for deferred rendering
+- Buttons and navigation components maintain focus styles and keyboard access
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Roadmap Notes
+- Integrate with Payload CMS once API is available
+- Replace mock API endpoints with real CRM/ESP hooks
+- Translate copy for `es` locale
+- Expand automated testing (unit + integration) once component interfaces stabilise
+# asml-site
